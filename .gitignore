@@ -105,6 +105,6 @@ venv.bak/
 
 # chrome driver file
 chromedriver/
-
+.chromedriver
 
 
