@@ -19,12 +19,11 @@ class InstagramScraper(object):
         driver.close()
         return image_text
 
-#This method will parse the image contents description to
-#disclude labels
+#This method will parse the image contents description to disclude labels
 def parse_img_description(image_text):
     parsed = []
     for text in image_text: 
-        if len(text): parsed.append(text.split(': ')[1])
+        if text: parsed.append(text.split(': ')[1])
     return parsed
 
 if __name__ == '__main__':
