@@ -23,10 +23,12 @@ class InstagramScraper(object):
 #disclude labels
 def parse_img_description(image_text):
     parsed = []
-    for text in image_text: parsed.append(text.split(': ')[1])
+    for text in image_text: 
+        if len(text): parsed.append(text.split(': ')[1])
     return parsed
 
 if __name__ == '__main__':
-    #scraper = InstagramScraper()
-    #selenium_objects = scraper.get_account_photos('maxgillham')
-    print(parse_img_description)
+    scraper = InstagramScraper()
+    selenium_objects = scraper.get_account_photos('maxgillham')
+    print(selenium_objects, '\n\n\nof length', len(selenium_objects))
+    print('\n\n\nparsed as ', parse_img_description(selenium_objects[:12]))
