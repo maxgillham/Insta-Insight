@@ -1,4 +1,5 @@
 from selenium import webdriver
+import sys
 
 #This is the scraper class
 class InstagramScraper(object):
@@ -22,12 +23,12 @@ class InstagramScraper(object):
 #This method will parse the image contents description to disclude labels
 def parse_img_description(image_text):
     parsed = []
-    for text in image_text: 
+    for text in image_text:
         if text: parsed.append(text.split(': ')[1])
     return parsed
 
 if __name__ == '__main__':
     scraper = InstagramScraper()
-    selenium_objects = scraper.get_account_photos('maxgillham')
+    selenium_objects = scraper.get_account_photos(sys.argv[1])
     print(selenium_objects, '\n\n\nof length', len(selenium_objects))
     print('\n\n\nparsed as ', parse_img_description(selenium_objects[:12]))
