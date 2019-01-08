@@ -28,7 +28,10 @@ def parse_img_description(image_text):
     return parsed
 
 if __name__ == '__main__':
-    scraper = InstagramScraper()
-    selenium_objects = scraper.get_account_photos(sys.argv[1])
-    print(selenium_objects, '\n\n\nof length', len(selenium_objects))
-    print('\n\n\nparsed as ', parse_img_description(selenium_objects[:12]))
+    try:
+        scraper = InstagramScraper()
+        selenium_objects = scraper.get_account_photos(sys.argv[1])
+        print(selenium_objects, '\n\n\nof length', len(selenium_objects))
+        print('\n\n\nparsed as ', parse_img_description(selenium_objects[:12]))
+    except:
+        print('Must pass valid username as arguement to script')
