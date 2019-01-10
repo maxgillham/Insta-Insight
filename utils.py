@@ -27,6 +27,16 @@ def parse_img_description(image_text):
         if text: parsed.append(text.split(': ')[1])
     return parsed
 
+#I want to generalize between selfies and group photos
+photo_contents = {
+    '1 person' : 'selfies',
+    '2 people' : 'group photos',
+    '3 people' : 'group photos',
+    '4 people' : 'group photos',
+    '5 people' : 'group photos',
+    '6 people' : 'group photos'
+}
+
 if __name__ == '__main__':
     try:
         scraper = InstagramScraper()
