@@ -8,7 +8,7 @@ from utils import *
 import numpy as np
 import sys
 
-#from the photo description find commin
+#from the photo description find common contents
 def common_photo_contents(contents):
     objts = []
     for i in contents: objts.extend(i.split(', '))
@@ -21,11 +21,10 @@ if __name__ == '__main__':
     try:
         username = sys.argv[1]
         scraper = InstagramScraper()
-        selenium_objects = scraper.get_account_photos(sys.argv[1])
-        counts = common_photo_contents(parse_img_description(selenium_objects[:12]))
-        max_ind = np.argmax(counts[1])
-        print('Detected photo contents', counts[0])
-        print('\nNumber of occurences in first 12 posts', counts[1])
-        print('\nCommon content contains', counts[0][np.argmax(counts[1])])
+        photo_content, links = scraper.get_account_photos(username)
+        content_counts = common_photo_contents(parse_img_description(photo_content[:12]))
+        print('Detected photo contents', content_counts[0])
+        print('\nNumber of occurences in first 12 posts', content_counts[1])
+        print('\nCommon content contains', content_counts[0][np.argmax(content_counts[1])])
     except:
         print('Must pass valid username as arguement to script')
