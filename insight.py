@@ -19,12 +19,14 @@ def common_photo_contents(contents):
 
 if __name__ == '__main__':
     try:
-        username = sys.argv[1]
-        scraper = InstagramScraper()
-        photo_content, links = scraper.get_account_photos(username)
-        content_counts = common_photo_contents(parse_img_description(photo_content[:12]))
+        scraper = InstagramScraper(sys.argv[1])
+        contents = scraper.get_photo_contents()
+        content_counts = common_photo_contents(parse_img_description(contents[:12]))
         print('Detected photo contents', content_counts[0])
-        print('\nNumber of occurences in first 12 posts', content_counts[1])
+        #print('\nNumber of occurences in first 12 posts', content_counts[1])
         print('\nCommon content contains', content_counts[0][np.argmax(content_counts[1])])
+        like_count = scraper.get_like_count()
+        print('\nLikes obtained by each post', like_count)
+        scraper.exit()
     except:
         print('Must pass valid username as arguement to script')
