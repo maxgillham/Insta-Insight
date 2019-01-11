@@ -3,28 +3,42 @@ import sys
 
 #This is the scraper class
 class InstagramScraper(object):
+    #init home page
+    def __init__(self, username):
+        self.home = "https://www.instagram.com/{}".format(username)
+        self.driver = webdriver.Chrome('./chromedriver/chromedriver')
+        self.secondary_driver = webdriver.Chrome('./chromedriver/chromedriver')
+        return
     #This will return instagram's algorithms guess on the contents of
     #the photo
-    def get_account_photos(self, username):
-        driver = webdriver.Chrome('./chromedriver/chromedriver')
-        url = "https://www.instagram.com/{}".format(username)
-        driver.get(url)
-        photos = driver.find_elements_by_class_name("KL4Bh")
-        image_text = []
+    def get_photo_contents(self):
+        #navagate to homepage
+        self.driver.get(self.home)
+        photos = self.driver.find_elements_by_class_name("KL4Bh")
+        photo_contents = []
         for photo in photos:
-            try:
-                image = photo.find_element_by_tag_name("img")
-                image_text.append(image.get_attribute("alt"))
-            except:
-                print("Failed")
-
+            try: photo_contents.append(photo.find_element_by_tag_name("img").get_attribute("alt"))
+            except: print("Failed")
+        return photo_contents
+    #this method returns an interger list of the number of likes each photo obtains
+    def get_like_count(self):
         #open photos and return like count
-        open_photos = driver.find_elements_by_class_name("_bz0w")
-        links = []
-        for photo in open_photos:
-            links.append(photo.find_element_by_tag_name('a').get_attribute('href'))
-        driver.close()
-        return image_text, links
+        self.driver.get(self.home)
+        self.secondary_driver.get(self.home)
+        photos = self.secondary_driver.find_elements_by_class_name("_bz0w")
+        like_count = []
+        for photo in photos:
+            self.driver.get(photo.find_element_by_tag_name('a').get_attribute('href'))
+            likes = self.driver.find_elements_by_class_name("zV_Nj")
+            try: like_count.append(likes[0].find_element_by_tag_name('span').text)
+            except: like_count.append(0)
+            self.driver.get(self.home)
+        return like_count
+    #a method to close the webdriver
+    def exit(self):
+        self.driver.close()
+        self.secondary_driver.close()
+        return
 
 #This method will parse the image contents description to disclude labels
 def parse_img_description(image_text):
@@ -44,11 +58,13 @@ photo_contents = {
 }
 
 if __name__ == '__main__':
+
     try:
-        scraper = InstagramScraper()
-        contents, links = scraper.get_account_photos(sys.argv[1])
-        print(contents)
-        print('\n\n\nparsed as ', parse_img_description(contents[:12]))
-        print('\n\n\nWith the following links', links)
+        scraper = InstagramScraper(sys.argv[1])
+        contents = scraper.get_photo_contents()
+        print('\nContents ', parse_img_description(contents[:12]))
+        like_count = scraper.get_like_count()
+        print('\nLikes obtained', like_count)
+        scraper.exit()
     except:
         print('Must pass valid username as arguement to script')
