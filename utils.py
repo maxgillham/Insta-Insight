@@ -31,7 +31,7 @@ class InstagramScraper(object):
             self.driver.get(photo.find_element_by_tag_name('a').get_attribute('href'))
             likes = self.driver.find_elements_by_class_name("zV_Nj")
             try: like_count.append(likes[0].find_element_by_tag_name('span').text)
-            except: like_count.append(0)
+            except: like_count.append('0')
             self.driver.get(self.home)
         return like_count
     #a method to close the webdriver
