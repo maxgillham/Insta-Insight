@@ -21,19 +21,23 @@ class InstagramScraper(object):
             except: print("Failed")
         return photo_contents
     #this method returns an interger list of the number of likes each photo obtains
-    def get_like_count(self):
+    def get_like_count_and_captions(self):
         #open photos and return like count
         self.driver.get(self.home)
         self.secondary_driver.get(self.home)
         photos = self.secondary_driver.find_elements_by_class_name("_bz0w")
         like_count = []
+        caption_list = []
         for photo in photos:
             self.driver.get(photo.find_element_by_tag_name('a').get_attribute('href'))
             likes = self.driver.find_elements_by_class_name("zV_Nj")
             try: like_count.append(likes[0].find_element_by_tag_name('span').text)
             except: like_count.append('0')
+            captions = self.driver.find_elements_by_class_name("C4VMK")
+            try: caption_list.append(captions[0].find_element_by_tag_name('span').text)
+            except: caption_list.append('No Caption')
             self.driver.get(self.home)
-        return like_count
+        return like_count, caption_list
     #a method to close the webdriver
     def exit(self):
         self.driver.close()
@@ -63,7 +67,7 @@ if __name__ == '__main__':
         scraper = InstagramScraper(sys.argv[1])
         contents = scraper.get_photo_contents()
         print('\nContents ', parse_img_description(contents[:12]))
-        like_count = scraper.get_like_count()
+        like_count, captions = scraper.get_like_count_and_captions()
         print('\nLikes obtained', like_count)
         scraper.exit()
     except:
