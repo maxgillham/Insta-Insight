@@ -7,6 +7,7 @@ from utils import *
 
 import numpy as np
 import sys
+import re
 
 #from the photo description find common contents
 def common_photo_contents(contents):
@@ -21,17 +22,25 @@ def common_photo_contents(contents):
 def content_sorted_by_likes(contents, likes):
     return [contents for _, contents in sorted(zip(likes, contents), reverse=True)]
 
+#return contents of hashtags from captions of photos
+def get_hashtags_from_captions(captions):
+    hashtags = []
+    for cap in captions: hashtags.extend(re.findall('#[^\s]+', cap))
+    return hashtags
+
 if __name__ == '__main__':
     try:
         scraper = InstagramScraper(sys.argv[1])
         contents = scraper.get_photo_contents()
         content_counts = common_photo_contents(parse_img_description(contents[:12]))
-        like_count = scraper.get_like_count()
+        like_count, caption_list = scraper.get_like_count_and_captions()
         top_content = content_sorted_by_likes(contents, like_count)
+        hashtags = get_hashtags_from_captions(caption_list)
         print('Detected photo contents', content_counts[0])
         print('\nCommon content contains', content_counts[0][np.argmax(content_counts[1])])
         print('\nLikes obtained by each post', like_count)
         print('\nMost likes on photos containing', top_content[:3])
+        print('\nHashtags used', hashtags)
         scraper.exit()
     except:
         print('Must pass valid username as arguement to script')
