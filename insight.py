@@ -39,7 +39,7 @@ if __name__ == '__main__':
         print('Detected photo contents', content_counts[0])
         print('\nCommon content contains', content_counts[0][np.argmax(content_counts[1])])
         print('\nLikes obtained by each post', like_count)
-        print('\nMost likes on photos containing', top_content[:3])
+        print('\nMost likes on photos containing', parse_img_description(top_content[:3]))
         print('\nHashtags used', hashtags)
         scraper.exit()
     except:
