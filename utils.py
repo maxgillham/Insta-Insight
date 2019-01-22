@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 import sys
 
 #This is the scraper class
@@ -6,8 +7,10 @@ class InstagramScraper(object):
     #init home page
     def __init__(self, username):
         self.home = "https://www.instagram.com/{}".format(username)
-        self.driver = webdriver.Chrome('./chromedriver/chromedriver')
-        self.secondary_driver = webdriver.Chrome('./chromedriver/chromedriver')
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Chrome('./chromedriver/chromedriver', chrome_options=options)
+        self.secondary_driver = webdriver.Chrome('./chromedriver/chromedriver', chrome_options=options)
         return
     #This will return instagram's algorithms guess on the contents of
     #the photo
