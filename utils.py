@@ -63,15 +63,3 @@ photo_contents = {
     '5 people' : 'group photos',
     '6 people' : 'group photos'
 }
-
-if __name__ == '__main__':
-
-    try:
-        scraper = InstagramScraper(sys.argv[1])
-        contents = scraper.get_photo_contents()
-        print('\nContents ', parse_img_description(contents[:12]))
-        like_count, captions = scraper.get_like_count_and_captions()
-        print('\nLikes obtained', like_count)
-        scraper.exit()
-    except:
-        print('Must pass valid username as arguement to script')
