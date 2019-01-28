@@ -1,6 +1,8 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.keys import Keys
 import sys
+import time
 
 #This is the scraper class
 class InstagramScraper(object):
@@ -8,7 +10,7 @@ class InstagramScraper(object):
     def __init__(self, username):
         self.home = "https://www.instagram.com/{}".format(username)
         options = Options()
-        options.headless = True
+        options.headless = False
         self.driver = webdriver.Chrome('./chromedriver/chromedriver', chrome_options=options)
         self.secondary_driver = webdriver.Chrome('./chromedriver/chromedriver', chrome_options=options)
         return
@@ -41,6 +43,30 @@ class InstagramScraper(object):
             except: caption_list.append('No Caption')
             self.driver.get(self.home)
         return like_count, caption_list
+    #sign into account
+    def sign_in(self, username, password):
+        #navagate to sign in page
+        self.driver.get("https://www.instagram.com/accounts/login/")
+        #find form inputs, username and pass input
+        username_form = self.driver.find_elements_by_css_selector("form input")[0]
+        password_form = self.driver.find_elements_by_css_selector("form input")[1]
+        #enter username, password and hit enter
+        username_form.send_keys(username)
+        password_form.send_keys(password)
+        password_form.send_keys(Keys.ENTER)
+        time.sleep(2)
+        return
+    #get list of followers
+    def get_followers(self):
+        self.driver.get(self.home)
+        followers_page = self.driver.find_element_by_css_selector('ul li a')
+        followers_page.click()
+        names = self.driver.find_elements_by_class_name("wo9IH")
+        followers = []
+        for name in names:
+            test = name.get_attribute('href')
+            print(test)
+        return
     #a method to close the webdriver
     def exit(self):
         self.driver.close()
@@ -63,3 +89,9 @@ photo_contents = {
     '5 people' : 'group photos',
     '6 people' : 'group photos'
 }
+
+
+if __name__ == "__main__":
+    scraper = InstagramScraper(sys.argv[1])
+    scraper.sign_in(sys.argv[1], sys.argv[2])
+    scraper.get_followers()
