@@ -8,6 +8,7 @@ from utils import *
 import numpy as np
 import sys
 import re
+import getpass
 
 #from the photo description find common contents
 def common_photo_contents(contents):
@@ -30,7 +31,9 @@ def get_hashtags_from_captions(captions):
 
 if __name__ == '__main__':
     try:
-        scraper = InstagramScraper(sys.argv[1])
+        username = input('Enter username: ')
+        password = getpass.getpass('Enter password: ')
+        scraper = InstagramScraper(username)
         contents = scraper.get_photo_contents()
         content_counts = common_photo_contents(parse_img_description(contents[:12]))
         like_count, caption_list = scraper.get_like_count_and_captions()

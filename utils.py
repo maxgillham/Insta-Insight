@@ -3,6 +3,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
 import sys
 import time
+import getpass
 
 #This is the scraper class
 class InstagramScraper(object):
@@ -92,6 +93,8 @@ photo_contents = {
 
 
 if __name__ == "__main__":
-    scraper = InstagramScraper(sys.argv[1])
-    scraper.sign_in(sys.argv[1], sys.argv[2])
+    username = input('Enter username: ')
+    password = getpass.getpass('Enter password: ')
+    scraper = InstagramScraper(username)
+    scraper.sign_in(username, password)
     scraper.get_followers()
